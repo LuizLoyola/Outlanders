@@ -1,8 +1,8 @@
 package dev.luizloyola.outlanders.item;
 
+import dev.luizloyola.outlanders.component.OutlandersComponents;
 import dev.luizloyola.outlanders.component.UuidComponent;
 import dev.luizloyola.outlanders.entity.PersonEntity;
-import dev.luizloyola.outlanders.registry.OutlandersComponents;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;

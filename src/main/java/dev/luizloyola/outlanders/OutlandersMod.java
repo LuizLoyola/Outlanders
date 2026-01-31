@@ -1,8 +1,8 @@
 package dev.luizloyola.outlanders;
 
-import dev.luizloyola.outlanders.registry.OutlandersComponents;
-import dev.luizloyola.outlanders.registry.OutlandersEntities;
-import dev.luizloyola.outlanders.registry.OutlandersItems;
+import dev.luizloyola.outlanders.component.OutlandersComponents;
+import dev.luizloyola.outlanders.entity.OutlandersEntities;
+import dev.luizloyola.outlanders.item.OutlandersItems;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

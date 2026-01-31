@@ -27,7 +27,7 @@ public abstract class ActiveTargetGoalMixin {
     protected abstract TargetPredicate getAndUpdateTargetPredicate();
 
     @Inject(method = "findClosestTarget", at = @At("RETURN"))
-    private void outlander$alsoTargetOutlanders(CallbackInfo ci) {
+    private void outlanders$alsoTargetOutlanders(CallbackInfo ci) {
         if (this.targetClass != PlayerEntity.class && this.targetClass != ServerPlayerEntity.class) {
             return;
         }

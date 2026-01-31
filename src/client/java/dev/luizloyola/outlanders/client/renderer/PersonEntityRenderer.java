@@ -1,6 +1,6 @@
 package dev.luizloyola.outlanders.client.renderer;
 
-import dev.luizloyola.outlanders.entity.PersonEntity;
+import dev.luizloyola.outlanders.entity.ClientPersonEntity;
 import dev.luizloyola.outlanders.entity.PersonState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,13 +39,13 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
 @Environment(EnvType.CLIENT)
-public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, PlayerEntityRenderState, PlayerEntityModel> {
-    public PersonEntityRenderer(EntityRendererFactory.Context ctx) {
-        super(ctx, new PlayerEntityModel(ctx.getPart(EntityModelLayers.PLAYER), false), 0.5F);
+public class PersonEntityRenderer extends LivingEntityRenderer<ClientPersonEntity, PlayerEntityRenderState, PlayerEntityModel> {
+    public PersonEntityRenderer(EntityRendererFactory.Context ctx, boolean slim) {
+        super(ctx, new PlayerEntityModel(ctx.getPart(/*slim ? EntityModelLayers.PLAYER_SLIM : */EntityModelLayers.PLAYER), slim), 0.5F);
         this.addFeature(
                 new ArmorFeatureRenderer<>(
                         this,
-                        EquipmentModelData.mapToEntityModel(                                EntityModelLayers.PLAYER_EQUIPMENT, ctx.getEntityModels(), root -> new PlayerEntityModel(root, false)                        ),
+                        EquipmentModelData.mapToEntityModel(/*slim ? EntityModelLayers.PLAYER_SLIM : */EntityModelLayers.PLAYER_EQUIPMENT, ctx.getEntityModels(), root -> new PlayerEntityModel(root, slim)),
                         ctx.getEquipmentRenderer()
                 )
         );
@@ -122,7 +122,7 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
                 }
             }
 
-            SwingAnimationComponent swingAnimationComponent = (SwingAnimationComponent)stack.get(DataComponentTypes.SWING_ANIMATION);
+            SwingAnimationComponent swingAnimationComponent = stack.get(DataComponentTypes.SWING_ANIMATION);
             if (swingAnimationComponent != null && swingAnimationComponent.type() == SwingAnimationType.STAB && player.handSwinging) {
                 return BipedEntityModel.ArmPose.SPEAR;
             } else {
@@ -182,13 +182,12 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
         return new PlayerEntityRenderState();
     }
 
-    public void updateRenderState(PersonEntity personEntity, PlayerEntityRenderState playerEntityRenderState, float f) {
+    public void updateRenderState(ClientPersonEntity personEntity, PlayerEntityRenderState playerEntityRenderState, float f) {
         super.updateRenderState(personEntity, playerEntityRenderState, f);
         BipedEntityRenderer.updateBipedRenderState(personEntity, playerEntityRenderState, f, this.itemModelResolver);
         playerEntityRenderState.leftArmPose = getArmPose(personEntity, Arm.LEFT);
         playerEntityRenderState.rightArmPose = getArmPose(personEntity, Arm.RIGHT);
-//        playerEntityRenderState.skinTextures = outlanderEntity.getSkin();
-//        playerEntityRenderState.skinTextures = DefaultSkinHelper.getSteve();
+        playerEntityRenderState.skinTextures = personEntity.getSkin();
         playerEntityRenderState.stuckArrowCount = personEntity.getStuckArrowCount();
         playerEntityRenderState.stingerCount = personEntity.getStingerCount();
         playerEntityRenderState.spectator = personEntity.isSpectator();
@@ -199,13 +198,9 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
         playerEntityRenderState.leftSleeveVisible = personEntity.isModelPartVisible(PlayerModelPart.LEFT_SLEEVE);
         playerEntityRenderState.rightSleeveVisible = personEntity.isModelPartVisible(PlayerModelPart.RIGHT_SLEEVE);
         playerEntityRenderState.capeVisible = personEntity.isModelPartVisible(PlayerModelPart.CAPE);
-//        this.updateGliding(outlanderEntity, playerEntityRenderState, f);
-//        this.updateCape(outlanderEntity, playerEntityRenderState, f);
-        if (playerEntityRenderState.squaredDistanceToCamera < 100.0) {
-            playerEntityRenderState.playerName = personEntity.getPersonName();
-        } else {
-            playerEntityRenderState.playerName = null;
-        }
+
+        this.updateGliding(personEntity, playerEntityRenderState, f);
+        this.updateCape(personEntity, playerEntityRenderState, f);
 
         playerEntityRenderState.leftShoulderParrotVariant = personEntity.getShoulderParrotVariant(true);
         playerEntityRenderState.rightShoulderParrotVariant = personEntity.getShoulderParrotVariant(false);
@@ -220,12 +215,13 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
         }
     }
 
-    protected boolean hasLabel(PersonEntity personEntity, double d) {
-        return super.hasLabel(personEntity, d)
-                && (personEntity.shouldRenderName() || personEntity.hasCustomName() && personEntity == this.dispatcher.targetedEntity);
+    protected boolean hasLabel(ClientPersonEntity personEntity, double squaredDistanceToCamera) {
+//        return super.hasLabel(personEntity, d)
+//                && (personEntity.shouldRenderName() || personEntity.hasCustomName() && personEntity == this.dispatcher.targetedEntity);
+        return squaredDistanceToCamera < 100.0;
     }
 
-    private void updateGliding(PersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
+    private void updateGliding(ClientPersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
         state.glidingTicks = personEntity.getGlidingTicks() + tickProgress;
         Vec3d vec3d = personEntity.getRotationVec(tickProgress);
         Vec3d vec3d2 = personEntity.getState().getVelocity().lerp(personEntity.getVelocity(), tickProgress);
@@ -240,7 +236,7 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
         }
     }
 
-    private void updateCape(PersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
+    private void updateCape(ClientPersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
         PersonState personState = personEntity.getState();
         double d = personState.lerpX(tickProgress) - MathHelper.lerp(tickProgress, personEntity.lastX, personEntity.getX());
         double e = personState.lerpY(tickProgress) - MathHelper.lerp(tickProgress, personEntity.lastY, personEntity.getY());
@@ -305,7 +301,7 @@ public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, Pla
         }
     }
 
-    public boolean shouldFlipUpsideDown(PersonEntity personEntity) {
+    public boolean shouldFlipUpsideDown(ClientPersonEntity personEntity) {
         if (personEntity.isModelPartVisible(PlayerModelPart.CAPE)) {
             return super.shouldFlipUpsideDown(personEntity);
         } else {

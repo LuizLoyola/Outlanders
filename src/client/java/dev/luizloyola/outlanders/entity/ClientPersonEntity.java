@@ -1,9 +1,12 @@
 package dev.luizloyola.outlanders.entity;
 
+import dev.luizloyola.outlanders.component.OutlandersComponents;
+import dev.luizloyola.outlanders.item.OutlandersItems;
 import dev.luizloyola.outlanders.mixin.client.ClientWorldAccessor;
-import dev.luizloyola.outlanders.registry.OutlandersComponents;
-import dev.luizloyola.outlanders.registry.OutlandersItems;
+import dev.luizloyola.outlanders.mixinInterfaces.DefaultSkinHelperExt;
+import net.minecraft.client.util.DefaultSkinHelper;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.player.SkinTextures;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -59,5 +62,10 @@ public class ClientPersonEntity extends PersonEntity {
         }
 
         return uuid.equals(this.getUuid());
+    }
+
+    public SkinTextures getSkin() {
+        var skinName = this.getPersonData().skinName();
+        return ((DefaultSkinHelperExt) new DefaultSkinHelper()).outlanders$getSkinByName(skinName);
     }
 }

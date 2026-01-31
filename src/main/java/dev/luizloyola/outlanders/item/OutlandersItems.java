@@ -1,7 +1,7 @@
-package dev.luizloyola.outlanders.registry;
+package dev.luizloyola.outlanders.item;
 
+import dev.luizloyola.outlanders.component.OutlandersComponents;
 import dev.luizloyola.outlanders.component.UuidComponent;
-import dev.luizloyola.outlanders.item.CommandStickItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;

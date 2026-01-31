@@ -1,7 +1,6 @@
-package dev.luizloyola.outlanders.registry;
+package dev.luizloyola.outlanders.component;
 
 import com.mojang.serialization.Codec;
-import dev.luizloyola.outlanders.component.UuidComponent;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;

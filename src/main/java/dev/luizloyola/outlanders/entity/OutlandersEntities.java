@@ -1,6 +1,5 @@
-package dev.luizloyola.outlanders.registry;
+package dev.luizloyola.outlanders.entity;
 
-import dev.luizloyola.outlanders.entity.PersonEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -26,7 +25,7 @@ public class OutlandersEntities {
                     .vehicleAttachment(PlayerLikeEntity.VEHICLE_ATTACHMENT)
                     .maxTrackingRange(32)
                     .trackingTickInterval(2),
-            PersonEntity.createLivingAttributes()
+            PersonEntity.createPersonAttributes()
     );
 
     public static <TEntity extends LivingEntity> EntityType<TEntity> register(String name, EntityType.EntityFactory<TEntity> factory, SpawnGroup spawnGroup, Function<EntityType.Builder<TEntity>, EntityType.Builder<TEntity>> builderFunction, DefaultAttributeContainer.Builder defaultAttributes) {

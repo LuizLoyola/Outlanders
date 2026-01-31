@@ -1,11 +1,13 @@
 {
-	"required": true,
-	"package": "dev.luizloyola.outlanders.mixin.client",
-	"compatibilityLevel": "JAVA_21",
-	"client": [
-		"ClientWorldAccessor"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "dev.luizloyola.outlanders.mixin.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientWorldAccessor",
+    "DefaultSkinHelperMixin",
+    "EntityRenderManagerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
