@@ -3,7 +3,9 @@
 	"package": "dev.luizloyola.outlanders.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"ExampleMixin"
+		"ActiveTargetGoalMixin",
+		"ServerWorldMixin",
+		"TrackTargetGoalAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

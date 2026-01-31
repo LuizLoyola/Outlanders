@@ -1,7 +1,7 @@
 package dev.luizloyola.outlanders.client.renderer;
 
-import dev.luizloyola.outlanders.entity.OutlanderEntity;
-import dev.luizloyola.outlanders.entity.OutlanderState;
+import dev.luizloyola.outlanders.entity.PersonEntity;
+import dev.luizloyola.outlanders.entity.PersonState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ModelPart;
@@ -12,7 +12,10 @@ import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.*;
-import net.minecraft.client.render.entity.model.*;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.model.EquipmentModelData;
+import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.render.state.CameraRenderState;
 import net.minecraft.client.util.math.MatrixStack;
@@ -36,8 +39,8 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 
 @Environment(EnvType.CLIENT)
-public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntity, PlayerEntityRenderState, PlayerEntityModel> {
-    public OutlanderEntityRenderer(EntityRendererFactory.Context ctx) {
+public class PersonEntityRenderer extends LivingEntityRenderer<PersonEntity, PlayerEntityRenderState, PlayerEntityModel> {
+    public PersonEntityRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new PlayerEntityModel(ctx.getPart(EntityModelLayers.PLAYER), false), 0.5F);
         this.addFeature(
                 new ArmorFeatureRenderer<>(
@@ -48,13 +51,13 @@ public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntit
         );
         this.addFeature(new PlayerHeldItemFeatureRenderer<>(this));
         this.addFeature(new StuckArrowsFeatureRenderer<>(this, ctx));
-//        this.addFeature(new Deadmau5FeatureRenderer(this, ctx.getEntityModels()));
-//        this.addFeature(new CapeFeatureRenderer(this, ctx.getEntityModels(), ctx.getEquipmentModelLoader()));
+        this.addFeature(new Deadmau5FeatureRenderer(this, ctx.getEntityModels()));
+        this.addFeature(new CapeFeatureRenderer(this, ctx.getEntityModels(), ctx.getEquipmentModelLoader()));
         this.addFeature(new HeadFeatureRenderer<>(this, ctx.getEntityModels(), ctx.getPlayerSkinCache()));
-//        this.addFeature(new ElytraFeatureRenderer<>(this, ctx.getEntityModels(), ctx.getEquipmentRenderer()));
+        this.addFeature(new ElytraFeatureRenderer<>(this, ctx.getEntityModels(), ctx.getEquipmentRenderer()));
         this.addFeature(new ShoulderParrotFeatureRenderer(this, ctx.getEntityModels()));
-//        this.addFeature(new TridentRiptideFeatureRenderer(this, ctx.getEntityModels()));
-//        this.addFeature(new StuckStingersFeatureRenderer<>(this, ctx));
+        this.addFeature(new TridentRiptideFeatureRenderer(this, ctx.getEntityModels()));
+        this.addFeature(new StuckStingersFeatureRenderer<>(this, ctx));
     }
 
     protected boolean shouldRenderFeatures(PlayerEntityRenderState playerEntityRenderState) {
@@ -179,53 +182,53 @@ public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntit
         return new PlayerEntityRenderState();
     }
 
-    public void updateRenderState(OutlanderEntity outlanderEntity, PlayerEntityRenderState playerEntityRenderState, float f) {
-        super.updateRenderState(outlanderEntity, playerEntityRenderState, f);
-        BipedEntityRenderer.updateBipedRenderState(outlanderEntity, playerEntityRenderState, f, this.itemModelResolver);
-        playerEntityRenderState.leftArmPose = getArmPose(outlanderEntity, Arm.LEFT);
-        playerEntityRenderState.rightArmPose = getArmPose(outlanderEntity, Arm.RIGHT);
+    public void updateRenderState(PersonEntity personEntity, PlayerEntityRenderState playerEntityRenderState, float f) {
+        super.updateRenderState(personEntity, playerEntityRenderState, f);
+        BipedEntityRenderer.updateBipedRenderState(personEntity, playerEntityRenderState, f, this.itemModelResolver);
+        playerEntityRenderState.leftArmPose = getArmPose(personEntity, Arm.LEFT);
+        playerEntityRenderState.rightArmPose = getArmPose(personEntity, Arm.RIGHT);
 //        playerEntityRenderState.skinTextures = outlanderEntity.getSkin();
 //        playerEntityRenderState.skinTextures = DefaultSkinHelper.getSteve();
-        playerEntityRenderState.stuckArrowCount = outlanderEntity.getStuckArrowCount();
-        playerEntityRenderState.stingerCount = outlanderEntity.getStingerCount();
-        playerEntityRenderState.spectator = outlanderEntity.isSpectator();
-        playerEntityRenderState.hatVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.HAT);
-        playerEntityRenderState.jacketVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.JACKET);
-        playerEntityRenderState.leftPantsLegVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.LEFT_PANTS_LEG);
-        playerEntityRenderState.rightPantsLegVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.RIGHT_PANTS_LEG);
-        playerEntityRenderState.leftSleeveVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.LEFT_SLEEVE);
-        playerEntityRenderState.rightSleeveVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.RIGHT_SLEEVE);
-        playerEntityRenderState.capeVisible = outlanderEntity.isModelPartVisible(PlayerModelPart.CAPE);
+        playerEntityRenderState.stuckArrowCount = personEntity.getStuckArrowCount();
+        playerEntityRenderState.stingerCount = personEntity.getStingerCount();
+        playerEntityRenderState.spectator = personEntity.isSpectator();
+        playerEntityRenderState.hatVisible = personEntity.isModelPartVisible(PlayerModelPart.HAT);
+        playerEntityRenderState.jacketVisible = personEntity.isModelPartVisible(PlayerModelPart.JACKET);
+        playerEntityRenderState.leftPantsLegVisible = personEntity.isModelPartVisible(PlayerModelPart.LEFT_PANTS_LEG);
+        playerEntityRenderState.rightPantsLegVisible = personEntity.isModelPartVisible(PlayerModelPart.RIGHT_PANTS_LEG);
+        playerEntityRenderState.leftSleeveVisible = personEntity.isModelPartVisible(PlayerModelPart.LEFT_SLEEVE);
+        playerEntityRenderState.rightSleeveVisible = personEntity.isModelPartVisible(PlayerModelPart.RIGHT_SLEEVE);
+        playerEntityRenderState.capeVisible = personEntity.isModelPartVisible(PlayerModelPart.CAPE);
 //        this.updateGliding(outlanderEntity, playerEntityRenderState, f);
 //        this.updateCape(outlanderEntity, playerEntityRenderState, f);
         if (playerEntityRenderState.squaredDistanceToCamera < 100.0) {
-            playerEntityRenderState.playerName = outlanderEntity.getOutlanderName();
+            playerEntityRenderState.playerName = personEntity.getPersonName();
         } else {
             playerEntityRenderState.playerName = null;
         }
 
-        playerEntityRenderState.leftShoulderParrotVariant = outlanderEntity.getShoulderParrotVariant(true);
-        playerEntityRenderState.rightShoulderParrotVariant = outlanderEntity.getShoulderParrotVariant(false);
-        playerEntityRenderState.id = outlanderEntity.getId();
-        playerEntityRenderState.extraEars = outlanderEntity.hasExtraEars();
+        playerEntityRenderState.leftShoulderParrotVariant = personEntity.getShoulderParrotVariant(true);
+        playerEntityRenderState.rightShoulderParrotVariant = personEntity.getShoulderParrotVariant(false);
+        playerEntityRenderState.id = personEntity.getId();
+        playerEntityRenderState.extraEars = personEntity.hasExtraEars();
         playerEntityRenderState.spyglassState.clear();
         if (playerEntityRenderState.isUsingItem) {
-            ItemStack itemStack = outlanderEntity.getStackInHand(playerEntityRenderState.activeHand);
+            ItemStack itemStack = personEntity.getStackInHand(playerEntityRenderState.activeHand);
             if (itemStack.isOf(Items.SPYGLASS)) {
-                this.itemModelResolver.updateForLivingEntity(playerEntityRenderState.spyglassState, itemStack, ItemDisplayContext.HEAD, outlanderEntity);
+                this.itemModelResolver.updateForLivingEntity(playerEntityRenderState.spyglassState, itemStack, ItemDisplayContext.HEAD, personEntity);
             }
         }
     }
 
-    protected boolean hasLabel(OutlanderEntity outlanderEntity, double d) {
-        return super.hasLabel(outlanderEntity, d)
-                && (outlanderEntity.shouldRenderName() || outlanderEntity.hasCustomName() && outlanderEntity == this.dispatcher.targetedEntity);
+    protected boolean hasLabel(PersonEntity personEntity, double d) {
+        return super.hasLabel(personEntity, d)
+                && (personEntity.shouldRenderName() || personEntity.hasCustomName() && personEntity == this.dispatcher.targetedEntity);
     }
 
-    private void updateGliding(OutlanderEntity outlanderEntity, PlayerEntityRenderState state, float tickProgress) {
-        state.glidingTicks = outlanderEntity.getGlidingTicks() + tickProgress;
-        Vec3d vec3d = outlanderEntity.getRotationVec(tickProgress);
-        Vec3d vec3d2 = outlanderEntity.getState().getVelocity().lerp(outlanderEntity.getVelocity(), tickProgress);
+    private void updateGliding(PersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
+        state.glidingTicks = personEntity.getGlidingTicks() + tickProgress;
+        Vec3d vec3d = personEntity.getRotationVec(tickProgress);
+        Vec3d vec3d2 = personEntity.getState().getVelocity().lerp(personEntity.getVelocity(), tickProgress);
         if (vec3d2.horizontalLengthSquared() > 1.0E-5F && vec3d.horizontalLengthSquared() > 1.0E-5F) {
             state.applyFlyingRotation = true;
             double d = vec3d2.getHorizontal().normalize().dotProduct(vec3d.getHorizontal().normalize());
@@ -237,12 +240,12 @@ public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntit
         }
     }
 
-    private void updateCape(OutlanderEntity outlanderEntity, PlayerEntityRenderState state, float tickProgress) {
-        OutlanderState outlanderState = outlanderEntity.getState();
-        double d = outlanderState.lerpX(tickProgress) - MathHelper.lerp(tickProgress, outlanderEntity.lastX, outlanderEntity.getX());
-        double e = outlanderState.lerpY(tickProgress) - MathHelper.lerp(tickProgress, outlanderEntity.lastY, outlanderEntity.getY());
-        double f = outlanderState.lerpZ(tickProgress) - MathHelper.lerp(tickProgress, outlanderEntity.lastZ, outlanderEntity.getZ());
-        float g = MathHelper.lerpAngleDegrees(tickProgress, outlanderEntity.lastBodyYaw, outlanderEntity.bodyYaw);
+    private void updateCape(PersonEntity personEntity, PlayerEntityRenderState state, float tickProgress) {
+        PersonState personState = personEntity.getState();
+        double d = personState.lerpX(tickProgress) - MathHelper.lerp(tickProgress, personEntity.lastX, personEntity.getX());
+        double e = personState.lerpY(tickProgress) - MathHelper.lerp(tickProgress, personEntity.lastY, personEntity.getY());
+        double f = personState.lerpZ(tickProgress) - MathHelper.lerp(tickProgress, personEntity.lastZ, personEntity.getZ());
+        float g = MathHelper.lerpAngleDegrees(tickProgress, personEntity.lastBodyYaw, personEntity.bodyYaw);
         double h = MathHelper.sin(g * (float) (Math.PI / 180.0));
         double i = -MathHelper.cos(g * (float) (Math.PI / 180.0));
         state.field_53536 = (float)e * 10.0F;
@@ -252,8 +255,8 @@ public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntit
         state.field_53537 = MathHelper.clamp(state.field_53537, 0.0F, 150.0F);
         state.field_53538 = (float)(d * i - f * h) * 100.0F;
         state.field_53538 = MathHelper.clamp(state.field_53538, -20.0F, 20.0F);
-        float j = outlanderState.lerpMovement(tickProgress);
-        float k = outlanderState.getLerpedDistanceMoved(tickProgress);
+        float j = personState.lerpMovement(tickProgress);
+        float k = personState.getLerpedDistanceMoved(tickProgress);
         state.field_53536 = state.field_53536 + MathHelper.sin(k * 6.0F) * 32.0F * j;
     }
 
@@ -302,9 +305,9 @@ public class OutlanderEntityRenderer extends LivingEntityRenderer<OutlanderEntit
         }
     }
 
-    public boolean shouldFlipUpsideDown(OutlanderEntity outlanderEntity) {
-        if (outlanderEntity.isModelPartVisible(PlayerModelPart.CAPE)) {
-            return super.shouldFlipUpsideDown(outlanderEntity);
+    public boolean shouldFlipUpsideDown(PersonEntity personEntity) {
+        if (personEntity.isModelPartVisible(PlayerModelPart.CAPE)) {
+            return super.shouldFlipUpsideDown(personEntity);
         } else {
             return false;
         }

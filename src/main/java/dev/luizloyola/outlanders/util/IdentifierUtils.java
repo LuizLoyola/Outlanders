@@ -4,7 +4,7 @@ import dev.luizloyola.outlanders.OutlandersMod;
 import net.minecraft.util.Identifier;
 
 public class IdentifierUtils {
-    public static Identifier idFor(String name) {
+    public static Identifier idOf(String name) {
         return Identifier.of(OutlandersMod.MOD_ID, name);
     }
 }

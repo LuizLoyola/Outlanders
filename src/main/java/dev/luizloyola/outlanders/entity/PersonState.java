@@ -3,7 +3,7 @@ package dev.luizloyola.outlanders.entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class OutlanderState {
+public class PersonState {
     private Vec3d velocity = Vec3d.ZERO;
     private float distanceMoved;
     private float lastDistanceMoved;

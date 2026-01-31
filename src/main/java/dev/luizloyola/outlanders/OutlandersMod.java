@@ -1,10 +1,11 @@
 package dev.luizloyola.outlanders;
 
+import dev.luizloyola.outlanders.registry.OutlandersComponents;
+import dev.luizloyola.outlanders.registry.OutlandersEntities;
+import dev.luizloyola.outlanders.registry.OutlandersItems;
 import net.fabricmc.api.ModInitializer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import dev.luizloyola.outlanders.init.OutlandersRegistry;
 
 public class OutlandersMod implements ModInitializer {
 	public static final String MOD_ID = "outlanders";
@@ -21,6 +22,8 @@ public class OutlandersMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
-		OutlandersRegistry.init();
+		OutlandersComponents.init();
+		OutlandersEntities.init();
+		OutlandersItems.init();
 	}
 }

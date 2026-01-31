@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlanders.iml" filepath="$PROJECT_DIR$/.idea/modules/outlanders.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlanders.client.iml" filepath="$PROJECT_DIR$/.idea/modules/outlanders.client.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlanders.main.iml" filepath="$PROJECT_DIR$/.idea/modules/outlanders.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/outlanders.test.iml" filepath="$PROJECT_DIR$/.idea/modules/outlanders.test.iml" />
