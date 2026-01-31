@@ -3,15 +3,15 @@
 	"id": "outlanders",
 	"version": "${version}",
 	"name": "Outlanders",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "You're not alone in this world...",
 	"authors": [
-		"Me!"
+		"Luiz Loyola"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://example.com/TODO",
+		"sources": "https://example.com/TODO"
 	},
-	"license": "CC0-1.0",
+	"license": "All Rights Reserved",
 	"icon": "assets/outlanders/icon.png",
 	"environment": "*",
 	"entrypoints": {
