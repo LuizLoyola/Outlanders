@@ -1,5 +1,6 @@
 package dev.luizloyola.outlanders.entity;
 
+import dev.luizloyola.outlanders.registry.OutlandersEntities;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.decoration.MannequinEntity;
 import net.minecraft.entity.passive.ParrotEntity;
@@ -16,9 +17,15 @@ public class PersonEntity extends MannequinEntity {
         super((EntityType<MannequinEntity>) entityType, world);
     }
 
+    protected PersonEntity(World world) {
+        this(OutlandersEntities.PERSON, world);
+    }
+
+
     public void tick() {
         super.tick();
         this.state.tick(this.getEntityPos(), this.getVelocity());
+
 //        if (this.skinLookup != null && this.skinLookup.isDone()) {
 //            try {
 //                ((Optional)this.skinLookup.get()).ifPresent(this::setSkin);

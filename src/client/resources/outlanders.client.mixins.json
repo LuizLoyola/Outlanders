@@ -3,7 +3,7 @@
 	"package": "dev.luizloyola.outlanders.mixin.client",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"ExampleClientMixin"
+		"ClientWorldAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1
