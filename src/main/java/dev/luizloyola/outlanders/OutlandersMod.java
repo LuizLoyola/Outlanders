@@ -4,8 +4,9 @@ import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import dev.luizloyola.outlanders.init.OutlandersRegistry;
 
-public class Outlanders implements ModInitializer {
+public class OutlandersMod implements ModInitializer {
 	public static final String MOD_ID = "outlanders";
 
 	// This logger is used to write text to the console and the log file.
@@ -20,5 +21,6 @@ public class Outlanders implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
+		OutlandersRegistry.init();
 	}
 }

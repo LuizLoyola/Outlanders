@@ -16,7 +16,7 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"dev.luizloyola.outlanders.Outlanders"
+			"dev.luizloyola.outlanders.OutlandersMod"
 		],
 		"client": [
 			"dev.luizloyola.outlanders.OutlandersClient"
