@@ -77,6 +77,11 @@ public class CommandStickItem extends Item {
             return ActionResult.CONSUME;
         }
 
+        var clickedBlock = context.getBlockPos();
+        var side = context.getSide();
+        var adjacentBlockPos = clickedBlock.offset(side);
+
+        boundPerson.getPersonBrain().setWalkTarget(adjacentBlockPos);
 
         return super.useOnBlock(context);
     }

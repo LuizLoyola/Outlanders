@@ -36,8 +36,8 @@ public class EntityRenderManagerMixin {
     )
     private <T extends Entity> void outlanders$getRenderer(T entity, CallbackInfoReturnable<EntityRenderer<? super T, ?>> cir) {
         if (entity instanceof PersonEntity person) {
-            var personData = person.getPersonData();
-            var gender = personData != null ? personData.gender() : null;
+            var identity = person.getIdentity();
+            var gender = identity != null ? identity.gender() : null;
             var playerSkinType = gender != null ? gender.choose(PlayerSkinType.WIDE, PlayerSkinType.SLIM) : PlayerSkinType.SLIM;
             //noinspection unchecked
             cir.setReturnValue((EntityRenderer<? super T, ?>) this.personRenderers.get(playerSkinType));

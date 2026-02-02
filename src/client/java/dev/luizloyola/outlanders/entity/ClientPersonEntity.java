@@ -65,7 +65,7 @@ public class ClientPersonEntity extends PersonEntity {
     }
 
     public SkinTextures getSkin() {
-        var skinName = this.getPersonData().skinName();
+        var skinName = this.getIdentity().skinName();
         return ((DefaultSkinHelperExt) new DefaultSkinHelper()).outlanders$getSkinByName(skinName);
     }
 }

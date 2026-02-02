@@ -1,4 +1,4 @@
-package dev.luizloyola.outlanders.entity.data;
+package dev.luizloyola.outlanders.entity;
 
 import net.minecraft.util.Formatting;
 

@@ -1,7 +1,5 @@
 package dev.luizloyola.outlanders.entity;
 
-import dev.luizloyola.outlanders.entity.data.Gender;
-import dev.luizloyola.outlanders.entity.data.PersonData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.data.DataTracker;
@@ -13,18 +11,15 @@ import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
-
 public class PersonEntity extends MannequinEntity {
-    private static final String PERSON_DATA_JSON_INIT_PLACEHOLDER = "--init--";
+    private static final String PERSON_BRAIN_JSON_INIT_PLACEHOLDER = "--init--";
     public static EntityType.EntityFactory<PersonEntity> personFactory = PersonEntity::new;
     private final PersonState state = new PersonState();
 
-    private static final TrackedData<String> PERSON_DATA_JSON = DataTracker.registerData(PersonEntity.class, TrackedDataHandlerRegistry.STRING);
+    private static final TrackedData<String> PERSON_BRAIN_JSON = DataTracker.registerData(PersonEntity.class, TrackedDataHandlerRegistry.STRING);
 
     public PersonEntity(EntityType<? extends MannequinEntity> entityType, World world) {
         //noinspection unchecked
@@ -41,7 +36,12 @@ public class PersonEntity extends MannequinEntity {
 
     public void tick() {
         super.tick();
+
         this.state.tick(this.getEntityPos(), this.getVelocity());
+
+        if (!this.getEntityWorld().isClient()) {
+            this.getPersonBrain().tick();
+        }
 
 //        if (this.skinLookup != null && this.skinLookup.isDone()) {
 //            try {
@@ -52,6 +52,19 @@ public class PersonEntity extends MannequinEntity {
 //            }
 //        }
     }
+
+    private PersonBrain personBrain;
+
+    public PersonBrain getPersonBrain() {
+        if (this.personBrain != null) {
+            return this.personBrain;
+        }
+
+        var personBrainJson = this.dataTracker.get(PERSON_BRAIN_JSON);
+        this.personBrain = PersonBrain.fromJson(this, personBrainJson);
+        return this.personBrain;
+    }
+
     @Nullable
     public static PersonEntity createPerson(EntityType<PersonEntity> type, World world) {
         return personFactory.create(type, world);
@@ -61,7 +74,7 @@ public class PersonEntity extends MannequinEntity {
     protected void initDataTracker(DataTracker.Builder builder) {
         super.initDataTracker(builder);
 
-        builder.add(PERSON_DATA_JSON, PERSON_DATA_JSON_INIT_PLACEHOLDER);
+        builder.add(PERSON_BRAIN_JSON, PERSON_BRAIN_JSON_INIT_PLACEHOLDER);
     }
 
     @Override
@@ -78,26 +91,15 @@ public class PersonEntity extends MannequinEntity {
     public Text getName() {
         // Name to be displayed above the entity
         var text = Text.literal(this.getPersonName());
-        var gender = this.getPersonData().gender();
+        var gender = this.getIdentity().gender();
         if (gender != null) {
             text.setStyle(Style.EMPTY.withColor(gender.colorFormatting()));
         }
         return text;
     }
 
-    private static PersonData createPersonData() {
-        var gender = Gender.random();
-
-        var maleSkins = List.of("kai", "noor", "steve", "sunny", "zuri");
-        var femaleSkins = List.of("alex", "ari", "efe", "makena");
-
-        var skinPool = gender.choose(maleSkins, femaleSkins);
-        var random = Random.create();
-        var randomSkinName = skinPool.get(random.nextInt(skinPool.size()));
-
-        var capitalizedName = randomSkinName.substring(0, 1).toUpperCase() + randomSkinName.substring(1);
-
-        return new PersonData(gender, capitalizedName, randomSkinName);
+    public PersonIdentity getIdentity() {
+        return this.getPersonBrain().getIdentity();
     }
 
     public ParrotEntity.@Nullable Variant getShoulderParrotVariant(boolean leftShoulder) {
@@ -105,12 +107,8 @@ public class PersonEntity extends MannequinEntity {
     }
 
     public String getPersonName() {
-        var name = this.getPersonData().name();
+        var name = this.getIdentity().name();
         return name != null ? name : "NULL";
-    }
-
-    public PersonData getPersonData() {
-        return PersonData.fromJson(this.dataTracker.get(PERSON_DATA_JSON));
     }
 
     public boolean hasExtraEars() {
@@ -125,20 +123,20 @@ public class PersonEntity extends MannequinEntity {
     protected void writeCustomData(WriteView view) {
         super.writeCustomData(view);
 
-        view.putString("person_data", this.getPersonData().toJson());
+        view.putString("person_brain", this.getPersonBrain().toJson());
     }
 
     @Override
     protected void readCustomData(ReadView view) {
         super.readCustomData(view);
 
-        var personDataJson = view.getString("person_data", PERSON_DATA_JSON_INIT_PLACEHOLDER);
-        if (personDataJson == null || personDataJson.equals(PERSON_DATA_JSON_INIT_PLACEHOLDER)) {
-            var personData = createPersonData();
-            personDataJson = personData.toJson();
+        var personBrainJson = view.getString("person_brain", PERSON_BRAIN_JSON_INIT_PLACEHOLDER);
+        if (personBrainJson == null || personBrainJson.equals(PERSON_BRAIN_JSON_INIT_PLACEHOLDER)) {
+            var newBrain = new PersonBrain(this);
+            personBrainJson = newBrain.toJson();
         }
 
-        this.dataTracker.set(PERSON_DATA_JSON, personDataJson);
+        this.dataTracker.set(PERSON_BRAIN_JSON, personBrainJson);
     }
 
 
